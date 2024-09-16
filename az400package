@@ -1,0 +1,66 @@
+
+Mastering Package Management for Azure DevOps Solutions - AZ-400
+Code for creating functionlaity code
+use this code when createing CoreFunctinalitly.cs file namespace coreServices
+
+    public class CoreFunctionality
+{
+    public String Display()
+    {
+        return "This class has core functionality";
+    }
+}
+
+
+Commands for packing and pushing
+
+/nuget.exe pack ./coreServices.csproj will not work so use dotnet pack ./coreServices.csproj
+
+
+
+use this command
+
+dotnet pack .\coreServices.csproj
+
+then this command
+
+
+
+copy this command from the nuget publish package
+
+
+
+# change the package name and the path before you execute
+
+./nuget.exe push -Source "CoreServices" -ApiKey Core C:\tmp8\CoreServices\CoreServices\bin\Release\coreServices.1.0.1.nupkg
+
+Code for new project where we will consume the pack
+
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+// Include the namespace for CoreFunctionality if it exists
+// using CoreServices2;
+
+namespace ConsumePackage.Pages
+{
+    public class IndexModel : PageModel
+    {
+        private readonly ILogger<IndexModel> _logger;
+
+        // Initialize Message with an empty string to resolve CS8618
+        public string Message { get; private set; } = string.Empty;
+
+        public IndexModel(ILogger<IndexModel> logger)
+        {
+            _logger = logger;
+        }
+
+        public void OnGet()
+        {
+            // Ensure CoreFunctionality is correctly referenced
+            CoreFunctionality coreFunctionality = new CoreFunctionality();
+            Message = coreFunctionality.Display();
+        }
+    }
+}
